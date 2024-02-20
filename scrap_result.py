@@ -3,6 +3,9 @@ import requests
 import json
 import time
 import csv
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 
 primer_colegio_id = 11909
@@ -20,7 +23,7 @@ def get_colegios(colegio_id):
     response = requests.get(url, headers=headers, verify=False )
     
     if response.status_code != 200:
-        raise(ConnectionError, f"Error in Page, got {response.status_code}")
+        raise ConnectionError ( f"Error in Page, got {response.status_code}")
     
     content = response.content
     parser = BeautifulSoup(content, "html.parser")
@@ -39,16 +42,17 @@ for colegio_id in range(primer_colegio_id, ultimo_colegio_id + 1):
     except PermissionError as e:
         print(e)
 
-
-for colegio_id in failed:
-    try:
-       raw_data = get_colegios(colegio_id=colegio_id)
-       with open(f"results/colegio_{colegio_id}.json", "w") as f:
-           f.writelines(raw_data)
-    except ConnectionError as e:
-        print(f"El colegio {colegio_id} a fallado su descarga, detalles", e)
-    except PermissionError as e:
-        print(e)    
+for _ in range(3):
+    for colegio_id in failed:
+        try:
+           raw_data = get_colegios(colegio_id=colegio_id)
+           with open(f"results/colegio_{colegio_id}.json", "w") as f:
+               f.writelines(raw_data)
+               failed.remove(colegio_id)
+        except ConnectionError as e:
+            print(f"El colegio {colegio_id} a fallado su descarga, detalles", e)
+        except PermissionError as e:
+            print(e)    
     
 
 #with open(f"results/colegio{primer_colegio_id}.json","r") as f:
