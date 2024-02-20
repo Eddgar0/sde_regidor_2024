@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
+import os.path
 import json
-import time
 import csv
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -45,6 +45,10 @@ if __name__ == "__main__":
     
     for _ in range(3):
         for colegio_id in failed:
+            if os.path.exists(f"results/colegio_{colegio_id}.json"):
+                print(f"File colegio_{colegio_id}.json exist skipping...")
+                failed.remove(colegio_id)
+                continue            
             try:
                raw_data = get_colegios(colegio_id=colegio_id)
                with open(f"results/colegio_{colegio_id}.json", "w") as f:
