@@ -33,6 +33,9 @@ def get_colegios(colegio_id):
 if __name__ == "__main__":
     print("Getting Data ...")
     for colegio_id in range(primer_colegio_id, ultimo_colegio_id + 1):
+        if os.path.exists(f"results/colegio_{colegio_id}.json"):
+            print(f"File colegio_{colegio_id}.json exist skipping...")
+            continue 
         try:
            raw_data = get_colegios(colegio_id=colegio_id)
            with open(f"results/colegio_{colegio_id}.json", "w") as f:
@@ -43,12 +46,8 @@ if __name__ == "__main__":
         except PermissionError as e:
             print(e)
     
-    for _ in range(3):
+    for _ in range(100):
         for colegio_id in failed:
-            if os.path.exists(f"results/colegio_{colegio_id}.json"):
-                print(f"File colegio_{colegio_id}.json exist skipping...")
-                failed.remove(colegio_id)
-                continue            
             try:
                raw_data = get_colegios(colegio_id=colegio_id)
                with open(f"results/colegio_{colegio_id}.json", "w") as f:
@@ -60,6 +59,7 @@ if __name__ == "__main__":
                 print(e)
 
     print("finished to download election data")
+    print(f"Total files: {ultimo_colegio_id - primer_colegio_id}")
     print(f"Missing colegios number: {len(failed)}")
     print("Missing colegios id:", *failed)    
     
