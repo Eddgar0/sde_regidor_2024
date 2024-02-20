@@ -46,7 +46,7 @@ if __name__ == "__main__":
         except PermissionError as e:
             print(e)
     
-    for _ in range(100):
+    for _ in range(5):
         for colegio_id in failed:
             try:
                raw_data = get_colegios(colegio_id=colegio_id)
