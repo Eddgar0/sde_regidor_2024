@@ -31,6 +31,7 @@ def get_colegios(colegio_id):
 
 
 if __name__ == "__main__":
+    print("Getting Data ...")
     for colegio_id in range(primer_colegio_id, ultimo_colegio_id + 1):
         try:
            raw_data = get_colegios(colegio_id=colegio_id)
@@ -52,8 +53,11 @@ if __name__ == "__main__":
             except ConnectionError as e:
                 print(f"El colegio {colegio_id} a fallado su descarga, detalles", e)
             except PermissionError as e:
-                print(e)    
-        
+                print(e)
+
+    print("finished to download election data")
+    print(f"Missing colegios number: {len(failed)}")
+    print("Missing colegios id:", *failed)    
     
     #with open(f"results/colegio{primer_colegio_id}.json","r") as f:
     #    data = data =json.load(f)
