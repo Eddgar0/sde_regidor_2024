@@ -1,0 +1,5 @@
+{
+    "python.terminal.activateEnvironment": false,
+    "terminal.integrated.defaultProfile.windows": "PowerShell Conda",
+    "terminal.integrated.env.windows": {}
+}

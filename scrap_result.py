@@ -34,7 +34,7 @@ if __name__ == "__main__":
     print("Getting Data ...")
     for colegio_id in range(primer_colegio_id, ultimo_colegio_id + 1):
         if os.path.exists(f"results/colegio_{colegio_id}.json"):
-            print(f"File colegio_{colegio_id}.json exist skipping...")
+            #print(f"File colegio_{colegio_id}.json exist skipping...")
             continue 
         try:
            raw_data = get_colegios(colegio_id=colegio_id)
