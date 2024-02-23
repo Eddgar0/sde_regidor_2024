@@ -118,11 +118,5 @@ if __name__ == "__main__":
     print(f"Total files: {len(sde_colegios['items'])}")
     print(f"Missing colegios number: {len(failed)}")
     print("Missing colegios id:", *failed)    
-    
-    #with open(f"results/colegio{primer_colegio_id}.json","r") as f:
-    #    data = data =json.load(f)
-    
-    #print(data[-1])
-    #print( *[d["votosPreferenciales"] for d in data], sep="\n")
 
 
