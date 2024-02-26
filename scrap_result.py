@@ -16,7 +16,7 @@ primer_colegio_id = 11909
 ultimo_colegio_id = 17324
 # Note the firs colegioid is 11909 and last is 17324
 failed = []
-
+force_download = True
 
 def get_cargos():
     """obtiene info de los cargos de los electivos"""
@@ -75,26 +75,27 @@ if __name__ == "__main__":
     print("Getting Data ...")
     cargos_path = "data/cargos.json"
 
-    if not os.path.exists(cargos_path):
-            with open(cargos_path, "w") as f:
+
+    if not os.path.exists(cargos_path) or force_download:
+            with open(cargos_path, "w", encoding="utf-8") as f:
                 f.writelines(get_cargos())
 
     try:
         sde_colegios = json.loads(get_colegios(11,municipios["SDE"]))
-        with open("data/sde/colegios.json", "w") as f:
+        with open("data/sde/colegios.json", "w", encoding="utf-8") as f:
             json.dump(sde_colegios, f)
     except ConnectionError as e:
-        with open("data/sde/colegios.json", "r") as f:
+        with open("data/sde/colegios.json", "r", encoding="utf-8") as f:
             sde_colegios = json.load(f)
 
     
     for colegio_id in sde_colegios["items"]:
-        if os.path.exists(f"data/sde/colegio_{colegio_id['letra']}.json"):
+        if os.path.exists(f"data/sde/colegio_{colegio_id['letra']}.json") and not force_download:
             #print(f"File colegio_{colegio_id}.json exist skipping...")
             continue 
         try:
            raw_data = get_results(cargo_id=61,municipio_id=municipios["SDE"],colegio_id=colegio_id["id"])
-           with open(f"data/sde/colegio_{colegio_id['letra']}.json", "w") as f:
+           with open(f"data/sde/colegio_{colegio_id['letra']}.json", "w", encoding="utf-8") as f:
                f.writelines(raw_data)
         except ConnectionError as e:
             failed.append(colegio_id)
@@ -106,7 +107,7 @@ if __name__ == "__main__":
         for colegio_id in failed:
             try:
                raw_data = get_results(cargo_id=61,municipio_id=municipios["SDE"],colegio_id=colegio_id["id"])
-               with open(f"data/sde/colegio_{colegio_id['letra']}.json", "w") as f:
+               with open(f"data/sde/colegio_{colegio_id['letra']}.json", "w", encoding="utf-8") as f:
                    f.writelines(raw_data)
                    failed.remove(colegio_id)
             except ConnectionError as e:
